@@ -1,0 +1,78 @@
+[handleMsg]:  {
+  key: {
+    remoteJid: '59169603027@s.whatsapp.net',
+    fromMe: false,
+    id: '3EB0D30CD308F685915826',
+    participant: undefined
+  },
+  messageTimestamp: 1749727083,
+  pushName: 'Paul',
+  broadcast: false,
+  message: Message {
+    conversation: 'Qué doctores hay en cardiología',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2,
+      messageSecret: [Uint8Array]
+    }
+  },
+  body: 'Qué doctores hay en cardiología',
+  from: '59169603027'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_8e57258d-b5be-4bde-99fa-947df0dfd98a',
+  keyword: 'key_22e9838e-c0cc-425b-9def-74a6e1bbcdc8',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: '31e4d35af46a7f9c34f1d2cb8856f9c5'
+}
+[handleMsg]:  {
+  key: {
+    remoteJid: '59169603027@s.whatsapp.net',
+    fromMe: false,
+    id: '745D3D7928EE26874ADC75F0947E60D6',
+    participant: undefined
+  },
+  messageTimestamp: 1749727111,
+  pushName: 'Paul',
+  broadcast: false,
+  message: Message {
+    conversation: 'Y si tengo una quemadura quién llamaría??',
+    messageContextInfo: MessageContextInfo {
+      deviceListMetadata: [DeviceListMetadata],
+      deviceListMetadataVersion: 2,
+      messageSecret: [Uint8Array]
+    }
+  },
+  body: 'Y si tengo una quemadura quién llamaría??',
+  from: '59169603027'
+}
+[QUEUE_SE_ENVIO]:  {
+  ref: 'ans_8e57258d-b5be-4bde-99fa-947df0dfd98a',
+  keyword: 'key_22e9838e-c0cc-425b-9def-74a6e1bbcdc8',
+  answer: '__call_action__',
+  options: {
+    media: null,
+    buttons: [],
+    capture: false,
+    child: null,
+    delay: 0,
+    idle: null,
+    ref: null,
+    nested: [],
+    keyword: {},
+    callback: true
+  },
+  refSerialize: '31e4d35af46a7f9c34f1d2cb8856f9c5'
+}
