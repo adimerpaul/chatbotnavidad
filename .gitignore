@@ -17,7 +17,7 @@ yarn-error.log*
 *.sln
 *.sw?
 .env
-boot_sessions
-.core.class.log
+/boot_sessions
+core.class.log
 queue.class.log
 bot.qr.png
