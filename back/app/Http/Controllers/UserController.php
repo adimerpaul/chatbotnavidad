@@ -62,7 +62,6 @@ class UserController extends Controller{
     }
     function index(){
         return User::where('id', '!=', 0)
-            ->with('docente')
             ->orderBy('id', 'desc')
             ->get();
     }

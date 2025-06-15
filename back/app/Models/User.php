@@ -54,8 +54,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    function docente()
-    {
-        return $this->belongsTo(Docente::class);
-    }
 }
