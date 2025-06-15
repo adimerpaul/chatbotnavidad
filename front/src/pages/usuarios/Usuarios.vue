@@ -105,9 +105,9 @@
                      :rules="[val => !!val || 'Campo requerido']" v-if="!user.id"/>
             <q-select v-model="user.role" label="Rol" dense outlined :options="roles"
                       :rules="[val => !!val || 'Campo requerido']"/>
-            <q-select v-model="user.docente_id" label="Docente" dense outlined :options="docentes"
-                      option-label="nombre" option-value="id" emit-value map-options
-                      :rules="[val => !!val || 'Campo requerido']"/>
+<!--            <q-select v-model="user.docente_id" label="Docente" dense outlined :options="docentes"-->
+<!--                      option-label="nombre" option-value="id" emit-value map-options-->
+<!--                      :rules="[val => !!val || 'Campo requerido']"/>-->
             <!--            <q-input v-model="user.phone" label="Telefono" dense outlined hint="" />-->
             <!--            <q-input v-model="user.codigo" label="Codigo" dense outlined hint="" />-->
             <!--            <q-input v-model="user.gestion" label="Gestion" dense outlined hint="" />-->
@@ -192,7 +192,7 @@ export default {
       actionUser: '',
       gestiones: [],
       filter: '',
-      roles: ['Administrador', 'Docente', 'Estudiante'],
+      roles: ['Administrador', 'Enfermera'],
       columns: [
         {name: 'actions', label: 'Acciones', align: 'center'},
         {name: 'name', label: 'Nombre', align: 'left', field: 'name'},
@@ -208,7 +208,7 @@ export default {
     }
   },
   async mounted() {
-    this.docentes = await this.$axios.get('docentes').then(res => res.data)
+    // this.docentes = await this.$axios.get('docentes').then(res => res.data)
     this.usersGet()
     // this.permissionsGet()
   },
@@ -267,7 +267,7 @@ export default {
         area_id: 1,
         username: '',
         cargo: '',
-        role: 'Estudiante',
+        role: 'Enfermera',
       }
       this.actionUser = 'Nuevo'
       this.userDialog = true
