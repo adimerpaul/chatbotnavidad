@@ -508,5 +508,40 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        $preguntas = [
+            [
+                'pregunta' => 'SI PREGUNTAN POR LA CAMPAÑA DE GINECOLOGIA Y OBSTETRICIA',
+                'respuesta' => 'HONORARIOS (GINECOLOGO, PEDIATRA, ANESTESIOLOGO, AYUDANTE), INTERNACIÓN EN SALA VIP, MEDICAMENTOS, LABORATORIOS CON UN PRECIO DE 4600 BS.-',
+                'activo' => true,
+            ],
+            [
+                'pregunta' => 'SI PREGUNTAN POR LA CAMPAÑA DE PARTO',
+                'respuesta' => 'HONORARIOS (GINECOLOGO, PEDIATRA), INTERNACIÓN EN SALA VIP, MEDICAMENTOS, LABORATORIOS CON UN PRECIO DE 3000 BS.-',
+                'activo' => true,
+            ],
+            [
+                'pregunta' => 'SI PREGUNTAN POR LA CAMPAÑA DE CESAREA',
+                'respuesta' => 'La campaña será hasta el 2 de julio de este año si desea agendar las cirugias y/o consultas se deberá contactar con agente para que agenden. Si la cesarea/parto desea programar para otro mes esto si es posible mediante la programación con el ginecologo',
+                'activo' => true,
+            ],
+            [
+                'pregunta' => 'SI PREGUNTAN POR EL NÚMERO DE EMERGENCIA',
+                'respuesta' => '78610575 - 52-54721 - 52-83667',
+                'activo' => true,
+            ],
+            [
+                'pregunta' => 'SI PREGUNTAN POR LA DIRECCIÓN DEL HOSPITAL',
+                'respuesta' => 'Bolivar Nº 753, entre Arica e Iquique',
+                'activo' => true,
+            ],
+        ];
+        foreach ($preguntas as $pregunta) {
+            \App\Models\Pregunta::create([
+                'pregunta' => $pregunta['pregunta'],
+                'respuesta' => $pregunta['respuesta'],
+                'activo' => $pregunta['activo'],
+            ]);
+        }
     }
 }

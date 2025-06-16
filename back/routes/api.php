@@ -3,6 +3,7 @@
 use App\Http\Controllers\AsignacionEstudianteController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorScheduleController;
+use App\Http\Controllers\PreguntaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('doctors', DoctorController::class);
     Route::post('doctors/{doctor}/schedules', [DoctorScheduleController::class, 'store']);
     Route::delete('doctor-schedules/{id}', [DoctorScheduleController::class, 'destroy']);
+    Route::apiResource('preguntas', PreguntaController::class);
 
 
 
