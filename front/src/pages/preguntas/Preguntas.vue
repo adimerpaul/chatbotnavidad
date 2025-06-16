@@ -11,7 +11,7 @@
       :rows-per-page-options="[0]"
     >
       <template v-slot:top-right>
-        <q-btn label="Nueva" icon="add" color="primary" @click="preguntaNueva" class="q-mr-sm" />
+        <q-btn label="Nueva" icon="add" color="green" @click="preguntaNueva" class="q-mr-sm" />
         <q-btn label="Actualizar" icon="refresh" @click="preguntasGet" color="secondary" />
         <q-input dense outlined v-model="filter" label="Buscar" class="q-ml-sm">
           <template v-slot:append><q-icon name="search" /></template>
@@ -28,6 +28,20 @@
       <template v-slot:body-cell-activo="props">
         <q-td :props="props">
           <q-toggle v-model="props.row.activo" @update:model-value="toggleActivo(props.row)" color="green" :false-value="0" :true-value="1" />
+        </q-td>
+      </template>
+      <template v-slot:body-cell-pregunta="props">
+        <q-td :props="props">
+          <div style="width: 250px; white-space: normal; word-wrap: break-word; line-height: 0.9;">
+            {{ props.row.pregunta }}
+          </div>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-respuesta="props">
+        <q-td :props="props">
+          <div style="width: 250px; white-space: normal; word-wrap: break-word; line-height: 0.9;">
+            {{ props.row.respuesta }}
+          </div>
         </q-td>
       </template>
     </q-table>
@@ -85,7 +99,7 @@ export default {
       })
     },
     preguntaNueva() {
-      this.pregunta = { pregunta: '', respuesta: '', activo: true }
+      this.pregunta = { pregunta: '', respuesta: '', activo: 1 }
       this.preguntaDialog = true
     },
     preguntaEditar(item) {
