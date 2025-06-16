@@ -106,6 +106,7 @@ const linksList = [
   {title: 'Principal', icon: 'home', link: '/', can: 'Todos'},
   {title: 'Usuarios', icon: 'people', link: '/usuarios', can: 'Administrador'},
   {title: 'Doctor', icon: 'local_hospital', link: '/doctor', can: ['Administrador', 'Enfermera']},
+  {title: 'Preguntas', icon: 'help', link: '/preguntas', can: ['Administrador', 'Enfermera']},
 ]
 
 const leftDrawerOpen = ref(false)
