@@ -55,6 +55,7 @@
             <q-input v-model="pregunta.pregunta" label="Pregunta" dense outlined :rules="[val => !!val || 'Campo requerido']" />
             <q-input v-model="pregunta.respuesta" label="Respuesta" type="textarea" autogrow outlined dense />
             <q-toggle v-model="pregunta.activo" label="Activa" :false-value="0" :true-value="1" color="green" class="q-mt-md" />
+            <q-input v-model="pregunta.precio" label="Precio" type="number" dense outlined :rules="[val => !!val || 'Campo requerido']" class="q-mt-md" />
             <div class="text-right q-mt-md">
               <q-btn label="Cancelar" flat @click="preguntaDialog = false" color="negative" :loading="loading" />
               <q-btn label="Guardar" color="primary" type="submit" class="q-ml-sm" :loading="loading" />
@@ -80,6 +81,7 @@ export default {
         { name: 'actions', label: 'Acciones', field: 'actions', align: 'center' },
         { name: 'pregunta', label: 'Pregunta', field: 'pregunta', align: 'left' },
         { name: 'respuesta', label: 'Respuesta', field: 'respuesta', align: 'left' },
+        { name: 'precio', label: 'Precio', field: 'precio', align: 'right'},
         { name: 'activo', label: 'Activo', field: 'activo', align: 'center' },
       ]
     }
@@ -99,7 +101,7 @@ export default {
       })
     },
     preguntaNueva() {
-      this.pregunta = { pregunta: '', respuesta: '', activo: 1 }
+      this.pregunta = { pregunta: '', respuesta: '', activo: 1, precio: ''},
       this.preguntaDialog = true
     },
     preguntaEditar(item) {

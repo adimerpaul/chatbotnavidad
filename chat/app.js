@@ -46,14 +46,14 @@ async function obtenerDoctoresConHorarios() {
 async function obtenerHistorialPorNumero(numero) {
 
     const [rows] = await pool.execute(
-        'SELECT keyword, answer, created_at FROM history WHERE phone = ? ORDER BY created_at DESC LIMIT 5',
+        'SELECT keyword, answer, created_at FROM history WHERE phone = ? AND  answer!="__call_action__" ORDER BY created_at DESC LIMIT 5',
         [numero]
     );
     return rows;
 }
 async function obtenerPreguntasFrecuentes() {
     const [rows] = await pool.execute(`
-        SELECT pregunta, respuesta
+        SELECT pregunta, respuesta, precio
         FROM preguntas
         WHERE activo = 1 AND deleted_at IS NULL
     `);
@@ -86,10 +86,18 @@ const flowNaty = addKeyword([], { events: [EVENTS.MESSAGE] })
         const historial = await obtenerHistorialPorNumero(ctx.from);
 
         const textoHistorial = historial.length > 0
-            ? historial.map((item, i) => `${i + 1}. ${item.keyword} → ${item.answer}`).join('\n')
+            ? historial.map((item, i) => `${i + 1}.${item.answer}`).join('\n')
             : 'Este usuario no tiene historial previo.';
+        console.log(textoHistorial)
+        // const textoHistorial= ''
 
-        const textoPreguntas = preguntasFaq.map(p => `❓ ${p.pregunta}\n💬 ${p.respuesta}`).join('\n\n');
+        const textoPreguntas = preguntasFaq.map(p => {
+            let texto = `❓ ${p.pregunta}\n💬 ${p.respuesta}`;
+            if (p.precio && !isNaN(p.precio)) {
+                texto += `\n💰 Precio: ${p.precio} Bs.`;
+            }
+            return texto;
+        }).join('\n\n');
 
         const prompt = `
 Eres Naty, la asistente virtual de Clínica Natividad siempre debes responder de manera profesional y amigable. Tu objetivo es ayudar a los usuarios con sus preguntas sobre salud, doctores, horarios, emergencias y más.
@@ -109,9 +117,11 @@ Tareas:
 - Muestra horarios si se pregunta por un doctor específico.
 - Si se pregunta por dirección, contacto, emergencias, responde adecuadamente.
 - Se empático y profesional en todas las respuestas.
+- el precio siempre debes lostrarlo de "Preguntas frecuentes:"
+- Cuando menciones un precio, asegúrate de usar el formato "💰 Precio: 150 Bs."
 - Si el usuario pide agendar, dile: "👌 ¡Perfecto! Te agendaré, por favor espera un momento que un personal se contactara con usted.
 `;
-
+        // console.log('Prompt enviado a Gemini:', prompt);
         const respuestaGemini = await consultarGemini(prompt);
         await flowDynamic(respuestaGemini);
     })

@@ -12,6 +12,7 @@ class Pregunta extends Model{
         'pregunta',
         'respuesta',
         'activo',
+        'precio'
     ];
     protected $hidden = [
         'created_at',

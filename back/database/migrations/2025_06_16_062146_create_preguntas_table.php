@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('pregunta');
             $table->text('respuesta')->nullable();
             $table->boolean('activo')->default(true);
+            $table->decimal('precio', 10, 2)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
