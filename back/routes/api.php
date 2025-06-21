@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AsignacionEstudianteController;
+use App\Http\Controllers\AtencionManualController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\PreguntaController;
@@ -28,6 +29,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('doctor-schedules/{id}', [DoctorScheduleController::class, 'destroy']);
     Route::apiResource('preguntas', PreguntaController::class);
 
+    Route::prefix('atencion-clientes')->group(function () {
+        Route::get('number', [AtencionManualController::class, 'number']);
+    });
 
+    Route::prefix('atencion-manual')->group(function () {
+        Route::post('/', [AtencionManualController::class, 'store']);
+        Route::delete('{phone}', [AtencionManualController::class, 'destroy']);
+    });
 
 });

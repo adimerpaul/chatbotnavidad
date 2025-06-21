@@ -75,12 +75,21 @@ async function consultarGemini(promptUsuario) {
         return '⚠️ Lo siento, ocurrió un error procesando tu solicitud.';
     }
 }
-
+async function estaEnAtencionManual(phone) {
+    const [rows] = await pool.execute('SELECT 1 FROM atencion_manual WHERE phone = ? AND deleted_at IS NULL LIMIT 1', [phone]);
+    return rows.length > 0;
+}
 
 
 // Flujo general
 const flowNaty = addKeyword([], { events: [EVENTS.MESSAGE] })
     .addAction(async (ctx, { flowDynamic }) => {
+        const enAtencion = await estaEnAtencionManual(ctx.from);
+        if (enAtencion) {
+            console.log(`📵 El número ${ctx.from} está siendo atendido manualmente. No se responde.`);
+            return; // No responder si está en atención
+        }
+
         const horariosDoctores = await obtenerDoctoresConHorarios();
         const preguntasFaq = await obtenerPreguntasFrecuentes();
         const historial = await obtenerHistorialPorNumero(ctx.from);

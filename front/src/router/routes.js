@@ -7,6 +7,7 @@ const routes = [
       {path: '/usuarios', component: () => import('pages/usuarios/Usuarios.vue'), meta: {requiresAuth: true}},
       {path: '/doctor', component: () => import('pages/doctor/Doctor.vue'), meta: {requiresAuth: true}},
       {path: '/preguntas', component: () => import('pages/preguntas/Preguntas.vue'), meta: {requiresAuth: true}},
+      {path: '/atencionCliente', component: () => import('pages/atencionCliente/AtencionCliente.vue'), meta: {requiresAuth: true}},
     ]
   },
   {
