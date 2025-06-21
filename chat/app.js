@@ -46,7 +46,7 @@ async function obtenerDoctoresConHorarios() {
 async function obtenerHistorialPorNumero(numero) {
 
     const [rows] = await pool.execute(
-        'SELECT keyword, answer, created_at FROM history WHERE phone = ? AND  answer!="__call_action__" ORDER BY created_at DESC LIMIT 5',
+        'SELECT keyword, answer, created_at FROM history WHERE phone = ? AND  answer!="__call_action__" and date(created_at)=date(now()) ORDER BY created_at DESC LIMIT 5',
         [numero]
     );
     return rows;
@@ -85,6 +85,10 @@ const flowNaty = addKeyword([], { events: [EVENTS.MESSAGE] })
         const preguntasFaq = await obtenerPreguntasFrecuentes();
         const historial = await obtenerHistorialPorNumero(ctx.from);
 
+        const textoDoctores = horariosDoctores.map(d => {
+            return `👨‍⚕️ *${d.nombre}* (${d.especialidad}):\n${d.horarios.map(h => `  - ${h.dias}: ${h.desde} a ${h.hasta} ${h.precio ? `💰 Precio: ${h.precio} Bs.` : ''}`).join('\n')}`;
+        }).join('\n\n');
+
         const textoHistorial = historial.length > 0
             ? historial.map((item, i) => `${i + 1}.${item.answer}`).join('\n')
             : 'Este usuario no tiene historial previo.';
@@ -110,7 +114,7 @@ ${textoPreguntas}
 Mensaje recibido del usuario: "${ctx.body}"
 
 Horarios de doctores:
-${horariosDoctores.map(d => `👨‍⚕️ *${d.nombre}* (${d.especialidad}):\n${d.horarios.map(h => `  - ${h.dias}: ${h.desde} a ${h.hasta}`).join('\n')}`).join('\n\n')}
+${textoDoctores}
 
 Tareas:
 - Detecta síntomas y sugiere especialidades.
@@ -121,7 +125,7 @@ Tareas:
 - Cuando menciones un precio, asegúrate de usar el formato "💰 Precio: 150 Bs."
 - Si el usuario pide agendar, dile: "👌 ¡Perfecto! Te agendaré, por favor espera un momento que un personal se contactara con usted.
 `;
-        // console.log('Prompt enviado a Gemini:', prompt);
+        console.log('Prompt enviado a Gemini:', prompt);
         const respuestaGemini = await consultarGemini(prompt);
         await flowDynamic(respuestaGemini);
     })
