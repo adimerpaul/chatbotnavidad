@@ -1,8 +1,8 @@
 {
-  "name": "asistencia",
+  "name": "chatbot",
   "version": "0.0.1",
-  "description": "Asistencia",
-  "productName": "Asistencia",
+  "description": "ChatBot",
+  "productName": "ChatBot",
   "author": "adimerpaul <adimer101@gmail.com>",
   "type": "module",
   "private": true,
