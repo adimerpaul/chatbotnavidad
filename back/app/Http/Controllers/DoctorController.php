@@ -8,7 +8,13 @@ use Illuminate\Http\Request;
 class DoctorController extends Controller{
     public function select()
     {
-        return Doctor::select('id', 'name')->orderBy('name')->get();
+        $doctors = Doctor::select('id', 'name','specialty')->orderBy('name')->get();
+        $doctors->transform(function ($doctor) {
+            $doctor->name = "{$doctor->name} ({$doctor->specialty})";
+            return $doctor;
+        });
+
+        return response()->json($doctors);
     }
     public function index()
     {
