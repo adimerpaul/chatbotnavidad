@@ -13,10 +13,25 @@
               option-value="id"
               label="Seleccionar doctor"
               @update:model-value="loadEvents"
+              :loading="loading"
+            />
+          </div>
+          <!--            btn actulizar-->
+          <div class="col-12 col-md-3 flex flex-center">
+            <q-btn
+              icon="refresh"
+              color="primary"
+              label="Actualizar eventos"
+              @click="loadEvents(selectedDoctor)"
+              :disable="!selectedDoctor"
+              no-caps
+              dense
             />
           </div>
         </div>
-        <full-calendar ref="calendar" :options="calendarOptions" />
+        <div class="q-pa-sm scroll q-mt-md">
+          <full-calendar ref="calendar" :options="calendarOptions" />
+        </div>
       </q-card-section>
     </q-card>
     <q-dialog v-model="show">
@@ -61,19 +76,21 @@
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn flat label="Cerrar" color="grey" v-close-popup />
+            <q-btn flat label="Cerrar" color="grey" v-close-popup :loading="loading" />
             <q-btn
               flat
               label="Cancelar cita"
               color="negative"
               v-if="editando"
               @click="cancelarCita"
+              :loading="loading"
             />
             <q-btn
               flat
               label="Guardar"
               color="primary"
               type="submit"
+              :loading="loading"
             />
           </q-card-actions>
         </q-form>
@@ -97,6 +114,7 @@ export default defineComponent({
   },
   data() {
     return {
+      loading: false,
       doctores: [],
       selectedDoctor: null,
       show: false,
@@ -108,6 +126,9 @@ export default defineComponent({
       editando: false,
       idCita: null,
       calendarOptions: {
+        height: 'auto',
+        // slotDuration: '00:05:00',
+        // slotLabelInterval: '00:15:00',
         dateClick: this.reservarDia,
         eventClick: this.editarCita,
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -127,7 +148,18 @@ export default defineComponent({
   },
   mounted() {
     this.getDoctores();
+    // if (this.$q.screen.lt.md) {
+    //   this.calendarOptions.initialView = 'timeGridDay';
+    // }
   },
+  // watch: {
+  //   '$q.screen.name'(val) {
+  //     if (val === 'xs' || val === 'sm') {
+  //       const api = this.$refs.calendar.getApi();
+  //       api.changeView('timeGridDay');
+  //     }
+  //   }
+  // },
   methods: {
     editarCita(info) {
       const evento = info.event;
@@ -188,16 +220,22 @@ export default defineComponent({
         cancel: true,
         persistent: true
       }).onOk(() => {
+        this.loading = true;
         this.$axios.put(`/appointments/${this.idCita}/cancelar`).then(() => {
           this.$q.notify({ type: 'warning', message: 'Cita cancelada' });
           this.show = false;
           this.loadEvents(this.selectedDoctor);
+        }).finally(() => {
+          this.loading = false;
         });
       });
     },
     getDoctores() {
+      this.loading = true;
       this.$axios.get('/doctores-select').then(res => {
         this.doctores = res.data;
+      }).finally(() => {
+        this.loading = false;
       });
     },
     loadEvents(doctorId) {
@@ -206,7 +244,7 @@ export default defineComponent({
       const tipoVista = view.type;
       const inicio = view.currentStart.toISOString().split('T')[0];
       const fin = view.currentEnd.toISOString().split('T')[0];
-
+      this.loading = true;
       this.$axios.get(`/doctor-horarios/${doctorId}`, {
         params: {
           tipo: tipoVista,
@@ -218,6 +256,8 @@ export default defineComponent({
         this.calendarOptions.events = res.data;
       }).catch(() => {
         this.$alert.error('No se pudo cargar los horarios');
+      }).finally(() => {
+        this.loading = false;
       });
     }
   }
@@ -226,4 +266,8 @@ export default defineComponent({
 
 <style>
 @import "@fullcalendar/common/main.css";
+.fc {
+  max-width: 100%;
+  overflow-x: auto;
+}
 </style>
