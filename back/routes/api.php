@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AsignacionEstudianteController;
 use App\Http\Controllers\AtencionManualController;
 use App\Http\Controllers\DoctorController;
@@ -42,6 +43,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('atencion-manual')->group(function () {
         Route::post('/', [AtencionManualController::class, 'store']);
         Route::delete('{phone}', [AtencionManualController::class, 'destroy']);
+    });
+
+    Route::prefix('appointments')->group(function () {
+        Route::get('/', [AppointmentController::class, 'index']);
+        Route::post('/', [AppointmentController::class, 'store']);
+        Route::put('{id}/cancelar', [AppointmentController::class, 'cancelar']);
+        Route::put('{id}', [AppointmentController::class, 'update']);
     });
 
 });
