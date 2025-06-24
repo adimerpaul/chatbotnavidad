@@ -5,6 +5,7 @@ use App\Http\Controllers\AtencionManualController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DoctorScheduleController;
 use App\Http\Controllers\PreguntaController;
+use App\Http\Controllers\ReporteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('doctors/{doctor}/schedules', [DoctorScheduleController::class, 'store']);
     Route::delete('doctor-schedules/{id}', [DoctorScheduleController::class, 'destroy']);
     Route::apiResource('preguntas', PreguntaController::class);
+    Route::get('/reportes/resumen', [ReporteController::class, 'resumen']);
 
     Route::prefix('atencion-clientes')->group(function () {
         Route::get('number', [AtencionManualController::class, 'number']);
