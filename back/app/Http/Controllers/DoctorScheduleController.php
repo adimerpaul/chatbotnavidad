@@ -80,13 +80,15 @@ class DoctorScheduleController extends Controller{
             ->get();
 
         foreach ($appointments as $cita) {
+            $duracion = now()->parse($cita->fecha_inicio)->diffInMinutes(now()->parse($cita->fecha_fin));
+
             $eventos[] = [
                 'title' => $cita->cliente,
                 'start' => $cita->fecha_inicio,
                 'end' => $cita->fecha_fin,
                 'extendedProps' => [
                     'id' => $cita->id,
-                    'duracion' => $cita->duracion,
+                    'duracion' => $duracion,
                     'observacion' => $cita->observacion
                 ]
             ];
