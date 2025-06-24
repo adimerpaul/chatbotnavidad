@@ -101,8 +101,12 @@ const flowNaty = addKeyword([], { events: [EVENTS.MESSAGE] })
         const textoHistorial = historial.length > 0
             ? historial.map((item, i) => `${i + 1}.${item.answer}`).join('\n')
             : 'Este usuario no tiene historial previo.';
-        console.log(textoHistorial)
+        // console.log(textoHistorial)
         // const textoHistorial= ''
+
+        const mensageNew = ctx.body.toLowerCase();
+        const regex = /[^\w\s]/g;
+        const mensajeNuevo = mensageNew.replace(regex, '').replace(/\s+/g, ' ').trim();
 
         const textoPreguntas = preguntasFaq.map(p => {
             let texto = `❓ ${p.pregunta}\n💬 ${p.respuesta}`;
@@ -120,7 +124,7 @@ ${textoHistorial}
 Preguntas frecuentes:
 ${textoPreguntas}
 
-Mensaje recibido del usuario: "${ctx.body}"
+Mensaje recibido del usuario: "${mensajeNuevo}"
 
 Horarios de doctores:
 ${textoDoctores}
@@ -131,7 +135,7 @@ Tareas:
 - Si se pregunta por dirección, contacto, emergencias, responde adecuadamente.
 - Se empático y profesional en todas las respuestas.
 - el precio siempre debes lostrarlo de "Preguntas frecuentes:"
-- Cuando menciones un precio, asegúrate de usar el formato "💰 Precio: 150 Bs."
+- Cuando menciones un precio, asegúrate de usar el formato "💰 Precio: 000 Bs."
 - Si el usuario pide agendar, dile: "👌 ¡Perfecto! Te agendaré, por favor espera un momento que un personal se contactara con usted.
 `;
         console.log('Prompt enviado a Gemini:', prompt);
