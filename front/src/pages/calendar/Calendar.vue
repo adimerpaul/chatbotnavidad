@@ -1,20 +1,24 @@
 <template>
   <q-page class="q-pa-xs">
     <q-card flat bordered>
-      <q-card-section class="text-h6 text-center">
-        Calendario de Horarios
-      </q-card-section>
+<!--      <q-card-section class="text-h6 text-center">-->
+<!--        Calendario de Horarios-->
+<!--      </q-card-section>-->
       <q-separator />
       <q-card-section class="q-pa-xs">
-        <q-select
-          outlined dense emit-value map-options
-          v-model="selectedDoctor"
-          :options="doctores"
-          option-label="name"
-          option-value="id"
-          label="Seleccionar doctor"
-          @update:model-value="loadEvents"
-        />
+        <div class="row">
+          <div class="col-12 col-md-4">
+            <q-select
+              outlined dense emit-value map-options
+              v-model="selectedDoctor"
+              :options="doctores"
+              option-label="name"
+              option-value="id"
+              label="Seleccionar doctor"
+              @update:model-value="loadEvents"
+            />
+          </div>
+        </div>
         <full-calendar :options="calendarOptions" />
       </q-card-section>
     </q-card>
