@@ -51,6 +51,7 @@ export default defineComponent({
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
+        allDaySlot: false,
         events: [],
         slotMinTime: '07:00:00',
         slotMaxTime: '21:00:00'
