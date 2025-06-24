@@ -108,6 +108,7 @@ const linksList = [
   {title: 'Doctor', icon: 'local_hospital', link: '/doctor', can: ['Administrador', 'Enfermera']},
   {title: 'Preguntas', icon: 'help', link: '/preguntas', can: ['Administrador', 'Enfermera']},
   {title: 'Atención al Cliente', icon: 'phone', link: '/atencionCliente', can: ['Administrador', 'Enfermera']},
+  {title: 'Calendario', icon: 'calendar_today', link: '/calendar', can: ['Administrador', 'Enfermera']},
 ]
 
 const leftDrawerOpen = ref(false)
