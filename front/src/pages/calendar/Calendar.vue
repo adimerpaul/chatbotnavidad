@@ -6,6 +6,15 @@
       </q-card-section>
       <q-separator />
       <q-card-section class="q-pa-xs">
+        <q-select
+          outlined dense emit-value map-options
+          v-model="selectedDoctor"
+          :options="doctores"
+          option-label="name"
+          option-value="id"
+          label="Seleccionar doctor"
+          @update:model-value="loadEvents"
+        />
         <full-calendar :options="calendarOptions" />
       </q-card-section>
     </q-card>
@@ -27,6 +36,8 @@ export default defineComponent({
   },
   data() {
     return {
+      doctores: [],
+      selectedDoctor: null,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: 'timeGridWeek',
@@ -40,29 +51,24 @@ export default defineComponent({
         slotMinTime: '07:00:00',
         slotMaxTime: '21:00:00'
       }
-    };
+    }
   },
   mounted() {
     // this.loadEvents();
+    this.getDoctores();
   },
   methods: {
-    async loadEvents() {
-      try {
-        const res = await this.$axios.get('/doctor-horarios'); // ruta que devolverá los horarios
-        const events = res.data.map(item => {
-          return {
-            title: item.doctor,
-            start: item.start,
-            end: item.end,
-            daysOfWeek: item.days, // opcional si quieres repetir por días
-            allDay: false
-          };
-        });
-        this.calendarOptions.events = events;
-      } catch (err) {
-        console.error(err);
-        this.$alert.error('Error al cargar horarios');
-      }
+    getDoctores() {
+      this.$axios.get('/doctores-select').then(res => {
+        this.doctores = res.data;
+      });
+    },
+    loadEvents(doctorId) {
+      this.$axios.get(`/doctor-horarios/${doctorId}`).then(res => {
+        this.calendarOptions.events = res.data;
+      }).catch(() => {
+        this.$alert.error('No se pudo cargar los horarios');
+      });
     }
   }
 });

@@ -9,6 +9,22 @@
           <template v-slot:append><q-icon name="search" /></template>
         </q-input>
       </template>
+      <template v-slot:body-cell-horarios="props">
+        <q-td :props="props">
+          <div v-if="props.row.schedules?.length">
+            <div
+              v-for="(s, index) in props.row.schedules"
+              :key="index"
+              class="text-caption text-grey-8"
+            >
+              <q-icon name="schedule" size="14px" class="q-mr-xs" />
+              {{ s.days }}: {{ s.available_from }} - {{ s.available_to }}
+            </div>
+          </div>
+          <div v-else class="text-grey">Sin horarios</div>
+<!--          <pre>{{ props.row }}</pre>-->
+        </q-td>
+      </template>
 
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
@@ -80,10 +96,25 @@
             </div>
           </q-form>
 
-          <q-table :rows="doctor.schedules || []" :columns="columnsHorarios" dense flat bordered row-key="id" class="q-mt-md">
+          <q-table :rows="doctor.schedules || []" :columns="columnsHorarios" dense flat bordered row-key="id" class="q-mt-md"
+                   :rows-per-page-options="[0]"
+          >
             <template v-slot:body-cell-actions="props">
               <q-td :props="props">
                 <q-btn icon="delete" color="negative" dense flat round @click="eliminarHorario(props.row.id)" />
+              </q-td>
+            </template>
+            <template v-slot:body-cell-price="props">
+              <q-td :props="props">
+                <q-input
+                  v-model.number="props.row.price"
+                  type="number"
+                  dense
+                  outlined
+                  debounce="800"
+                  @update:model-value="actualizarPrecio(props.row)"
+                  style="width: 90px"
+                />
               </q-td>
             </template>
           </q-table>
@@ -113,6 +144,7 @@ export default {
         { name: 'actions', label: 'Acciones', align: 'center' },
         { name: 'name', label: 'Nombre', field: 'name', align: 'left' },
         { name: 'specialty', label: 'Especialidad', field: 'specialty', align: 'left' },
+        { name: 'horarios', label: 'Horarios', field: 'schedules', align: 'left' }
       ],
       columnsHorarios: [
         { name: 'available_from', label: 'Desde', field: 'available_from', align: 'left' },
@@ -127,10 +159,31 @@ export default {
     this.doctoresGet()
   },
   methods: {
+    actualizarPrecio(horario) {
+      this.loading = true;
+      this.$axios.put(`doctor-schedules/${horario.id}`, {
+        price: horario.price
+      }).then(() => {
+        this.$alert.success('Precio actualizado');
+      }).catch(err => {
+        this.$alert.error(err.response?.data?.message || 'Error al actualizar precio');
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     doctoresGet() {
       this.loading = true
       this.$axios.get('doctors').then(res => {
-        this.doctores = res.data
+        this.doctores = res.data.map(doc => ({
+          ...doc,
+          schedules: (doc.schedules || []).map(s => ({
+            id: s.id,
+            available_from: s.available_from,
+            available_to: s.available_to,
+            days: s.days,
+            price: s.price
+          }))
+        }))
       }).catch(err => {
         this.$alert.error(err.response?.data?.message || 'Error al obtener doctores')
       }).finally(() => this.loading = false)
