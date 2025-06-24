@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 //})->middleware('auth:sanctum');
 Route::post('/login', [App\Http\Controllers\UserController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/doctor-horarios/{doctor_id}', [DoctorScheduleController::class, 'horariosPorDoctor']);
+    Route::get('/doctores-select', [DoctorController::class, 'select']);
+
     Route::post('/logout', [App\Http\Controllers\UserController::class, 'logout']);
     Route::get('/me', [App\Http\Controllers\UserController::class, 'me']);
 
@@ -27,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('doctors', DoctorController::class);
     Route::post('doctors/{doctor}/schedules', [DoctorScheduleController::class, 'store']);
+    Route::put('doctor-schedules/{id}', [DoctorScheduleController::class, 'update']);
     Route::delete('doctor-schedules/{id}', [DoctorScheduleController::class, 'destroy']);
     Route::apiResource('preguntas', PreguntaController::class);
     Route::get('/reportes/resumen', [ReporteController::class, 'resumen']);
