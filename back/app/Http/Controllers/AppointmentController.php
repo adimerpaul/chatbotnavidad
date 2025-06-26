@@ -24,6 +24,29 @@ class AppointmentController extends Controller{
         ]);
 
         $start = \Carbon\Carbon::parse("{$request->fecha} {$request->hora}");
+        $start->addMinutes(2);
+        $end = $start->copy()->addMinutes($request->duracion);
+        $end->subMinutes(2);
+
+        $existingAppointment = Appointment::where('doctor_id', $request->doctor_id)
+            ->where(function ($query) use ($start, $end) {
+                $query->where('fecha_inicio', '<', $end)
+                    ->where('fecha_fin', '>', $start);
+            })
+            ->exists();
+        if ($existingAppointment) {
+            $citas = Appointment::where('doctor_id', $request->doctor_id)
+                ->whereDate('fecha_inicio', $request->fecha)
+                ->orderBy('fecha_inicio')
+                ->get(['fecha_inicio', 'fecha_fin']);
+
+            return response()->json([
+                'message' => 'El horario seleccionado ya está ocupado. Por favor, elija otro horario disponible.',
+                'ocupados' => $citas
+            ], 409);
+        }
+
+        $start = \Carbon\Carbon::parse("{$request->fecha} {$request->hora}");
         $end = $start->copy()->addMinutes($request->duracion);
 
         return Appointment::create([
