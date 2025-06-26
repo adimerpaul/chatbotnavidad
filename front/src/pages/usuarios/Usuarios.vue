@@ -192,7 +192,8 @@ export default {
       actionUser: '',
       gestiones: [],
       filter: '',
-      roles: ['Administrador', 'Enfermera'],
+      roles: ['Administrador', 'Admision'],
+      roles: ['Administrador', 'Admision'],
       columns: [
         {name: 'actions', label: 'Acciones', align: 'center'},
         {name: 'name', label: 'Nombre', align: 'left', field: 'name'},
@@ -267,7 +268,8 @@ export default {
         area_id: 1,
         username: '',
         cargo: '',
-        role: 'Enfermera',
+        role: 'Admision',
+        role: 'Admision',
       }
       this.actionUser = 'Nuevo'
       this.userDialog = true

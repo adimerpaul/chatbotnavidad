@@ -105,10 +105,10 @@ const { proxy } = getCurrentInstance()
 const linksList = [
   {title: 'Principal', icon: 'home', link: '/', can: 'Todos'},
   {title: 'Usuarios', icon: 'people', link: '/usuarios', can: 'Administrador'},
-  {title: 'Doctor', icon: 'local_hospital', link: '/doctor', can: ['Administrador', 'Enfermera']},
-  {title: 'Preguntas', icon: 'help', link: '/preguntas', can: ['Administrador', 'Enfermera']},
-  {title: 'Atención al Cliente', icon: 'phone', link: '/atencionCliente', can: ['Administrador', 'Enfermera']},
-  {title: 'Calendario', icon: 'calendar_today', link: '/calendar', can: ['Administrador', 'Enfermera']},
+  {title: 'Doctor', icon: 'local_hospital', link: '/doctor', can: ['Administrador']},
+  {title: 'Preguntas', icon: 'help', link: '/preguntas', can: ['Administrador']},
+  {title: 'Atención al Cliente', icon: 'phone', link: '/atencionCliente', can: ['Administrador']},
+  {title: 'Calendario', icon: 'calendar_today', link: '/calendar', can: ['Administrador', 'Admision']},
 ]
 
 const leftDrawerOpen = ref(false)
