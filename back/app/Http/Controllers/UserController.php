@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 
@@ -40,7 +41,7 @@ class UserController extends Controller{
     function login(Request $request){
         $credentials = $request->only('username', 'password');
         $user = User::where('username', $credentials['username'])->first();
-        if (!$user || !password_verify($credentials['password'], $user->password)) {
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json([
                 'message' => 'Usuario o contraseña incorrectos',
             ], 401);
@@ -74,7 +75,7 @@ class UserController extends Controller{
     function updatePassword(Request $request, $id){
         $user = User::find($id);
         $user->update([
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->newPassword)
         ]);
         return $user;
     }
@@ -84,6 +85,9 @@ class UserController extends Controller{
             'password' => 'required',
             'name' => 'required',
 //            'email' => 'required|email|unique:users',
+        ]);
+        $request->merge([
+            'password' => Hash::make($request->password),
         ]);
         $user = User::create($request->all());
         return $user;
