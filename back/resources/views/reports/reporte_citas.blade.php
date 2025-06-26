@@ -11,7 +11,7 @@
         .info { margin-bottom: 20px; }
         .info p { margin: 4px 0; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
+        th, td { border: 1px solid #333; padding: 0px; text-align: center; }
         th { background: #e9ecef; }
         .footer { margin-top: 30px; font-size: 12px; text-align: right; color: #888; }
     </style>
@@ -28,8 +28,15 @@
     <table>
         <thead>
         <tr>
-            <th>Hora</th>
+            <th>#</th>
             <th>Paciente</th>
+{{--            'consultacontrol',--}}
+{{--            'seguroclinico',--}}
+{{--            'celular'--}}
+            <th>Consulta <br>/Control</th>
+            <th>Seguro <br>/Clínico</th>
+            <th>Hora</th>
+            <th>Celular</th>
             <th>Duración</th>
             <th>Observación</th>
         </tr>
@@ -37,8 +44,12 @@
         <tbody>
         @foreach($citas as $cita)
             <tr>
-                <td>{{ \Carbon\Carbon::parse($cita->fecha_inicio)->format('H:i') }}</td>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $cita->cliente }}</td>
+                <td>{{ $cita->consultacontrol }}</td>
+                <td>{{ $cita->seguroclinico }}</td>
+                <td>{{ \Carbon\Carbon::parse($cita->fecha_inicio)->format('H:i') }}</td>
+                <td>{{ $cita->celular }}</td>
                 <td>{{ \Carbon\Carbon::parse($cita->fecha_inicio)->diffInMinutes(\Carbon\Carbon::parse($cita->fecha_fin)) }} min</td>
                 <td>{{ $cita->observacion }}</td>
             </tr>

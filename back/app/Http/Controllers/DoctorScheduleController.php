@@ -89,7 +89,10 @@ class DoctorScheduleController extends Controller{
                 'extendedProps' => [
                     'id' => $cita->id,
                     'duracion' => $duracion,
-                    'observacion' => $cita->observacion
+                    'observacion' => $cita->observacion,
+                    'consultacontrol' => $cita->consultacontrol,
+                    'seguroclinico' => $cita->seguroclinico,
+                    'celular' => $cita->celular,
                 ]
             ];
         }

@@ -19,6 +19,9 @@ return new class extends Migration
             $table->datetime('fecha_fin');    // <- NUEVO
             $table->text('observacion')->nullable();
             $table->string('estado')->default('ACTIVA');
+            $table->string('consultacontrol')->nullable();
+            $table->string('seguroclinico')->nullable();
+            $table->string('celular')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

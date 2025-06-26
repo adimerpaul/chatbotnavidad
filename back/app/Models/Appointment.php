@@ -13,7 +13,10 @@ class Appointment extends Model{
         'fecha_inicio',
         'fecha_fin',
         'observacion',
-        'estado'
+        'estado',
+        'consultacontrol',
+        'seguroclinico',
+        'celular'
     ];
     protected $hidden = [
         'created_at',

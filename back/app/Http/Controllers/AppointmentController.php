@@ -55,6 +55,9 @@ class AppointmentController extends Controller{
             'fecha_inicio' => $start,
             'fecha_fin' => $end,
             'observacion' => $request->observacion,
+            'consultacontrol' => $request->consultacontrol,
+            'seguroclinico' => $request->seguroclinico,
+            'celular' => $request->celular,
             'estado' => 'ACTIVA'
         ]);
     }
@@ -80,6 +83,9 @@ class AppointmentController extends Controller{
             'fecha_inicio' => $start,
             'fecha_fin' => $end,
             'observacion' => $request->observacion,
+            'consultacontrol' => $request->consultacontrol,
+            'seguroclinico' => $request->seguroclinico,
+            'celular' => $request->celular,
         ]);
 
         return response()->json(['message' => 'Cita actualizada', 'data' => $appointment]);
