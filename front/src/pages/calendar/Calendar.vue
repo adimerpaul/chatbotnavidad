@@ -16,7 +16,6 @@
               :loading="loading"
             />
           </div>
-          <!--            btn actulizar-->
           <div class="col-12 col-md-3 flex flex-center">
             <q-btn
               icon="refresh"
@@ -26,6 +25,19 @@
               :disable="!selectedDoctor"
               no-caps
               dense
+              :loading ="loading"
+            />
+          </div>
+          <div class="col-12 col-md-5 flex flex-center">
+            <q-btn
+              icon="picture_as_pdf"
+              color="red"
+              label="Reporte PDF"
+              @click="descargarReporte"
+              :disable="!selectedDoctor"
+              no-caps
+              dense
+              :loading="loading"
             />
           </div>
         </div>
@@ -106,6 +118,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
+import moment from "moment";
 
 export default defineComponent({
   name: 'CalendarPage',
@@ -127,8 +140,8 @@ export default defineComponent({
       idCita: null,
       calendarOptions: {
         height: 'auto',
-        // slotDuration: '00:05:00',
-        // slotLabelInterval: '00:15:00',
+        // slotDuration: '00:15:00',
+        // slotLabelInterval: '00:30:00',
         dateClick: this.reservarDia,
         eventClick: this.editarCita,
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -161,6 +174,41 @@ export default defineComponent({
   //   }
   // },
   methods: {
+    descargarReporte() {
+      // dilao para fecha
+      this.$q.dialog({
+        title: 'Generar reporte diario',
+        // colocar el nombre del edoctos
+        message: 'Doctor: ' + (this.doctores.find(d => d.id === this.selectedDoctor)?.name || 'No seleccionado'),
+        prompt: {
+          type: 'date',
+          model: moment().format('YYYY-MM-DD'),
+        },
+        cancel: true,
+        persistent: true
+      }).onOk((fecha) => {
+        this.loading = true;
+        this.$axios.post('/appointments/reporte-diario', {
+          doctor_id: this.selectedDoctor,
+          fecha: fecha
+        }, { responseType: 'blob' })
+          .then(res => {
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `reporte_citas_${this.selectedDoctor}_${this.fecha}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+          })
+          .catch(() => {
+            this.$q.notify({ type: 'negative', message: 'No se pudo generar el reporte' });
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+      });
+    },
     editarCita(info) {
       const evento = info.event;
 
@@ -204,6 +252,7 @@ export default defineComponent({
 
       const method = this.editando ? 'put' : 'post';
 
+      this.loading = true;
       this.$axios[method](url, payload).then(() => {
         this.$q.notify({ type: 'positive', message: this.editando ? 'Cita actualizada' : 'Cita registrada' });
         this.show = false;
