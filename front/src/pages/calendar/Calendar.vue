@@ -78,6 +78,24 @@
               class="q-mt-sm"
               :rules="[val => !!val || 'Seleccione duración']"
             />
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <q-toggle v-model="consultacontrol" false-value="Consulta" true-value="Control"
+                          :label="consultacontrol"
+                />
+              </div>
+              <div class="col-12 col-md-6">
+                <q-toggle v-model="seguroclinico" false-value="Seguro" true-value="Clinico"
+                          :label="seguroclinico"/>
+              </div>
+            </div>
+            <q-input
+              v-model="celular"
+              type="number"
+              label="Celular"
+              outlined dense
+              class="q-mt-sm"
+            />
             <q-input
               v-model="observacion"
               type="textarea"
@@ -138,6 +156,9 @@ export default defineComponent({
       observacion: '',
       editando: false,
       idCita: null,
+      consultacontrol: '',
+      seguroclinico: '',
+      celular: '',
       calendarOptions: {
         height: 'auto',
         // slotDuration: '00:15:00',
@@ -212,6 +233,7 @@ export default defineComponent({
     editarCita(info) {
       const evento = info.event;
 
+      console.log(evento)
       this.editando = true;
       this.idCita = evento.extendedProps.id;
       this.fecha = evento.startStr.split('T')[0];
@@ -219,6 +241,9 @@ export default defineComponent({
       this.cliente = evento.title;
       this.duracion = evento.extendedProps.duracion || 20;
       this.observacion = evento.extendedProps.observacion || '';
+      this.consultacontrol = evento.extendedProps.consultacontrol || '';
+      this.seguroclinico = evento.extendedProps.seguroclinico || '';
+      this.celular = evento.extendedProps.celular || '';
       this.show = true;
     },
     reservarDia(info) {
@@ -231,6 +256,9 @@ export default defineComponent({
       this.duracion = 15;
       this.cliente = '';
       this.observacion = '';
+      this.consultacontrol = 'Consulta';
+      this.seguroclinico = 'Seguro';
+      this.celular = '';
       this.editando = false;
       this.idCita = null;
       this.show = true;
@@ -243,7 +271,10 @@ export default defineComponent({
         fecha: this.fecha,
         hora: this.hora,
         duracion: this.duracion,
-        observacion: this.observacion
+        observacion: this.observacion,
+        consultacontrol: this.consultacontrol,
+        seguroclinico: this.seguroclinico,
+        celular: this.celular
       };
 
       const url = this.editando
