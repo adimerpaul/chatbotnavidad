@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller{
@@ -69,5 +70,33 @@ class AppointmentController extends Controller{
         $appointment->delete();
 
         return response()->json(['message' => 'Cita cancelada']);
+    }
+    public function reporteDiario(Request $request)
+    {
+        $request->validate([
+            'doctor_id' => 'required|exists:doctors,id',
+            'fecha' => 'required|date',
+        ]);
+
+        $doctor = \App\Models\Doctor::findOrFail($request->doctor_id);
+        $citas = Appointment::where('doctor_id', $doctor->id)
+            ->whereDate('fecha_inicio', $request->fecha)
+            ->orderBy('fecha_inicio')
+            ->get();
+//        return $citas;
+        $user = auth()->user();
+
+        $pdf = Pdf::loadView('reports.reporte_citas', [
+            'doctor' => $doctor,
+            'citas' => $citas,
+            'fecha' => $request->fecha,
+            'user' => $user
+        ]);
+
+
+
+        return $pdf->stream('reporte_citas_'.$doctor->id.'_'.$request->fecha.'.pdf', [
+            'Attachment' => false // Para mostrar en el navegador
+        ]);
     }
 }

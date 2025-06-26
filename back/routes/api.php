@@ -50,6 +50,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [AppointmentController::class, 'store']);
         Route::put('{id}/cancelar', [AppointmentController::class, 'cancelar']);
         Route::put('{id}', [AppointmentController::class, 'update']);
+        Route::post('/reporte-diario', [AppointmentController::class, 'reporteDiario']);
     });
 
 });
+Route::get('/reporteDiario', [AppointmentController::class, 'reporteDiario']);
