@@ -257,8 +257,25 @@ export default defineComponent({
         this.$q.notify({ type: 'positive', message: this.editando ? 'Cita actualizada' : 'Cita registrada' });
         this.show = false;
         this.loadEvents(this.selectedDoctor);
-      }).catch(() => {
-        this.$q.notify({ type: 'negative', message: 'Error al guardar la cita' });
+      }).catch((res) => {
+        if (res.response?.status === 409 && res.response?.data?.ocupados) {
+          const ocupados = res.response.data.ocupados
+            .map(cita => {
+              const inicio = moment(cita.fecha_inicio).format('HH:mm');
+              const fin = moment(cita.fecha_fin).format('HH:mm');
+              return `${inicio} - ${fin}`;
+            })
+            .join('<br>');
+          this.$q.dialog({
+            title: 'Horario ocupado',
+            message: `El horario seleccionado ya está ocupado.<br><br><b>Horarios ocupados:</b><br>${ocupados}`,
+            html: true
+          });
+        } else {
+          this.$alert.error(res.response?.data?.message || 'Error al guardar la cita');
+        }
+      }).finally(() => {
+        this.loading = false;
       });
     },
 
